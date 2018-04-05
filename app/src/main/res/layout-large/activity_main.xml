@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.example.priyanka.bakingrecipes.MainActivity">
+
+    <fragment
+        class="com.example.priyanka.bakingrecipes.RecipesListFragment"
+        android:id="@+id/frag_list"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical">
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <fragment
+            class="com.example.priyanka.bakingrecipes.StepsFragment"
+            android:id="@+id/fragment_container_steps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <fragment
+            class="com.example.priyanka.bakingrecipes.IngredientsFragment"
+            android:id="@+id/fragment_container_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
