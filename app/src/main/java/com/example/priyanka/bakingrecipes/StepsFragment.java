@@ -47,6 +47,5 @@ public class StepsFragment extends Fragment {
 
     public void setStepsList(ArrayList<StepsModel> list) {
         stepsList = list;
-//        Log.v("TAG", "INGREDIENTS LIST ===================== " + stepsList);
     }
 }

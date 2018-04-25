@@ -30,9 +30,10 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
         } else {
             Intent intent = new Intent(this, RecipeDetailsActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("ingredients", model.getIngredients());
-            bundle.putSerializable("steps", model.getSteps());
-//            intent.putExtra("name", bundle);
+            bundle.putParcelableArrayList("ingredients", model.getIngredients());
+            bundle.putParcelableArrayList("steps", model.getSteps());
+            bundle.putParcelableArrayList("videoUrl", model.getVideoUrl());
+
             bundle.putString("name", model.getName());
             intent.putExtra("data",bundle);
             Log.v("TAG", "ANOTHER THING --------------------- " + model.getIngredients());

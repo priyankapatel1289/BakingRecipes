@@ -55,9 +55,10 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
                     recipeModel.setServings(finalObject.getInt("servings"));
 
                     JSONArray ingredients = finalObject.getJSONArray("ingredients");
+                    ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
+
                     for (int j = 0; j<ingredients.length(); j++) {
                         JSONObject ingredientObject = ingredients.getJSONObject(j);
-                        ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
                         IngredientsModel ingredientsModel = new IngredientsModel();
                         ingredientsModel.setQuantity((float) ingredientObject.getDouble("quantity"));
                         ingredientsModel.setMeasure(ingredientObject.getString("measure"));
@@ -69,15 +70,23 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
                     }
 
                     JSONArray steps = finalObject.getJSONArray("steps");
+                    ArrayList<StepsModel> stepsList = new ArrayList<>();
+                    ArrayList<StepsModel> videoUrl = new ArrayList<>();
+
                     for (int k = 0; k<steps.length(); k++) {
                         JSONObject stepsObject = steps.getJSONObject(k);
-                        ArrayList<StepsModel> stepsList = new ArrayList<>();
                         StepsModel stepsModel = new StepsModel();
+                        StepsModel videoModel = new StepsModel();
                         stepsModel.setShortDescription(stepsObject.getString("shortDescription"));
                         stepsModel.setDescription(stepsObject.getString("description"));
-                        stepsModel.setVideoURL(stepsObject.getString("videoURL"));
+
+                        videoModel.setVideoURL(stepsObject.getString("videoURL"));
+
                         stepsList.add(stepsModel);
+                        videoUrl.add(videoModel);
+
                         recipeModel.setSteps(stepsList);
+                        recipeModel.setVideoUrl(videoUrl);
 //                        Log.v("TAG", "VALUE OF STEPS LIST =============================== " + stepsModel.getVideoURL());
                     }
 

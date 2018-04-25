@@ -17,6 +17,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private String name;
     private ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
     private ArrayList<StepsModel> stepsList = new ArrayList<>();
+    private ArrayList<StepsModel> videoUrlList = new ArrayList<>();
 
     private StepsFragment stepsFragment;
     private IngredientsFragment ingredientsFragment;
@@ -59,15 +60,18 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (intent != null) {
             if (intent.hasExtra("data")) {
                 Bundle bundle = intent.getBundleExtra("data");
-                ingredientsList = (ArrayList<IngredientsModel>)bundle.getParcelable("ingredients");
-                stepsList = (ArrayList<StepsModel>)bundle.getSerializable("steps");
+                ingredientsList = bundle.getParcelableArrayList("ingredients");
+                stepsList = bundle.getParcelableArrayList("steps");
+                videoUrlList = bundle.getParcelableArrayList("videoUrl");
+
                 ingredientsFragment.setIngredientsList(ingredientsList);
                 stepsFragment.setStepsList(stepsList);
+                videoInstructionsFragment.setVideoUrlList(videoUrlList);
+
                 name = bundle.getString("name");
-//                name = intent.getStringExtra("name");
                 replaceFragment(ingredientsFragment);
                 setTitle(name);
-                Log.v("TAG", "VALUE OF INGREDIENTS IS: " + ingredientsList);
+                Log.v("TAG", "VALUE OF INGREDIENTS IS: " + videoUrlList);
             }
         }
     }
