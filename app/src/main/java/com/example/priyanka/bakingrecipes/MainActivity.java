@@ -11,6 +11,8 @@ import com.example.priyanka.bakingrecipes.models.RecipeModel;
 
 public class MainActivity extends AppCompatActivity implements RecipesListFragment.RecipeListListener {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +23,12 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
         View fragmentContainer = findViewById(R.id.fragment_container);
         if (fragmentContainer != null) {
             IngredientsFragment ingredientsFragment = new IngredientsFragment();
+//            StepsFragment stepsFragment = new StepsFragment();
+//            VideoInstructionsFragment videoInstructionsFragment = new VideoInstructionsFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             ingredientsFragment.setIngredientsList(model.getIngredients());
+//            stepsFragment.setStepsList(model.getSteps());
+//            videoInstructionsFragment.setVideoUrlList(model.getVideoUrl());
             fragmentTransaction.replace(R.id.fragment_container, ingredientsFragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragmentTransaction.addToBackStack(null);

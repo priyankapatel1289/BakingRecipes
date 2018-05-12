@@ -19,6 +19,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private ArrayList<StepsModel> stepsList = new ArrayList<>();
     private ArrayList<StepsModel> videoUrlList = new ArrayList<>();
 
+    private int position;
+
     private StepsFragment stepsFragment;
     private IngredientsFragment ingredientsFragment;
     private VideoInstructionsFragment videoInstructionsFragment;
@@ -38,11 +40,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         stepsFragment = new StepsFragment();
         videoInstructionsFragment = new VideoInstructionsFragment();
 
+        if (savedInstanceState != null) {
+            position = savedInstanceState.getInt("tabPosition");
+        }
+
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                setCurrentTabFragment(tab.getPosition());
+                    position = tab.getPosition();
+                    setCurrentTabFragment(position);
             }
 
             @Override
@@ -76,7 +83,20 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
     }
 
-        public void replaceFragment(Fragment fragment) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("tabPosition", position);
+    }
+
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//
+//        position = savedInstanceState.getInt("tabPosition");
+//    }
+
+    public void replaceFragment(Fragment fragment) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout_details, fragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

@@ -20,17 +20,20 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <fragment
             class="com.example.priyanka.bakingrecipes.StepsFragment"
             android:id="@+id/fragment_container_steps"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <fragment
-            class="com.example.priyanka.bakingrecipes.IngredientsFragment"
+            class="com.example.priyanka.bakingrecipes.VideoInstructionsFragment"
             android:id="@+id/fragment_container_ingredients"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 

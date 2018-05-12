@@ -25,9 +25,6 @@ import com.google.android.exoplayer2.util.Util;
 import java.util.ArrayList;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class VideoInstructionsFragment extends Fragment {
 
     private ArrayList<StepsModel> videoUrlList = new ArrayList<>();
@@ -56,7 +53,7 @@ public class VideoInstructionsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
-        if (view != null) {
+        if (view != null && videoUrlList != null) {
             playerView = view.findViewById(R.id.video_view);
 
             if (Util.SDK_INT > 23) {
@@ -138,6 +135,7 @@ public class VideoInstructionsFragment extends Fragment {
     }
 
     private MediaSource buildMediaSource(Uri uri) {
+
         return new ExtractorMediaSource.Factory(
                 new DefaultHttpDataSourceFactory("exo-player"))
                 .createMediaSource(uri);
