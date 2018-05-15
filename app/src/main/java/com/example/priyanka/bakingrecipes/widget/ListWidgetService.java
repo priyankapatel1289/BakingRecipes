@@ -40,6 +40,18 @@ public class ListWidgetService extends RemoteViewsService {
         @Override
         public void onCreate() {
 
+//            Gson gson = new Gson();
+//            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, Context.MODE_PRIVATE);
+//            String json = sharedPreferences.getString(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, "");
+//            RecipeModel model = gson.fromJson(json, RecipeModel.class);
+//            ingredientsList = model.getIngredients();
+
+
+
+        }
+
+        @Override
+        public void onDataSetChanged() {
             Gson gson = new Gson();
             SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, Context.MODE_PRIVATE);
             String json = sharedPreferences.getString(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, "");
@@ -48,11 +60,6 @@ public class ListWidgetService extends RemoteViewsService {
 
             Log.v("ListWidgetService", "Ingredients List " + ingredientsList);
 
-
-        }
-
-        @Override
-        public void onDataSetChanged() {
         }
 
         @Override
