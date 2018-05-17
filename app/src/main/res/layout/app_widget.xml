@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
+    android:background="@color/blue"
     android:padding="@dimen/widget_margin">
 
     <ListView
@@ -13,7 +13,7 @@
         android:id="@+id/widget_empty_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Select more recipe!"
+        android:text="@string/select_more_recipe"
         android:gravity="center"/>
 
 </FrameLayout>

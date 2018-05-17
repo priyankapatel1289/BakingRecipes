@@ -11,16 +11,8 @@ import android.widget.RemoteViews;
 
 import com.example.priyanka.bakingrecipes.MainActivity;
 import com.example.priyanka.bakingrecipes.R;
-import com.example.priyanka.bakingrecipes.models.IngredientsModel;
 
-import java.util.ArrayList;
-
-/**
- * Implementation of App Widget functionality.
- */
 public class AppWidget extends AppWidgetProvider {
-
-    ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -71,12 +63,10 @@ public class AppWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
     }
 }
 

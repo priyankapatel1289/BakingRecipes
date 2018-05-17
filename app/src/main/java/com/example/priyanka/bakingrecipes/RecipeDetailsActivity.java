@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.priyanka.bakingrecipes.models.IngredientsModel;
 import com.example.priyanka.bakingrecipes.models.StepsModel;
@@ -78,7 +77,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 name = bundle.getString("name");
                 replaceFragment(ingredientsFragment);
                 setTitle(name);
-                Log.v("TAG", "VALUE OF INGREDIENTS IS: " + videoUrlList);
             }
         }
     }
@@ -88,13 +86,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt("tabPosition", position);
     }
-
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//
-//        position = savedInstanceState.getInt("tabPosition");
-//    }
 
     public void replaceFragment(Fragment fragment) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

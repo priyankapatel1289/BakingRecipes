@@ -23,13 +23,13 @@ public class ListWidgetService extends RemoteViewsService {
         return new ListViewsFactory(this.getApplicationContext(), intent);
     }
 
-    public  class ListViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    class ListViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         private ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
         private Context mContext;
         private Intent mIntent;
 
-        public ListViewsFactory(Context applicationContext, Intent intent) {
+        private ListViewsFactory(Context applicationContext, Intent intent) {
             mContext = applicationContext;
             mIntent = intent;
 
