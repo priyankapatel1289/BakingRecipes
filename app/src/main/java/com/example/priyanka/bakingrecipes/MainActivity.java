@@ -1,9 +1,9 @@
 package com.example.priyanka.bakingrecipes;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         } else {
+            Gson gson = new Gson();
+            String jsonIngredients = gson.toJson(model.getIngredients());
+            Log.v("MAIN ACTIVITY GSON", "GSON CONVERSION " + jsonIngredients);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(WIDGET_INGREDIENT_SHAREDPREF, jsonIngredients);
+            editor.apply();
+
             Intent intent = new Intent(this, RecipeDetailsActivity.class);
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList("ingredients", model.getIngredients());
@@ -48,23 +56,6 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
             bundle.putString("name", model.getName());
             intent.putExtra("data",bundle);
             startActivity(intent);
-
-            Gson gson = new Gson();
-            String jsonIngredients = gson.toJson(model.getIngredients());
-            Log.v("MAIN ACTIVITY GSON", "GSON CONVERSION " + jsonIngredients);
-            SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(WIDGET_INGREDIENT_SHAREDPREF, jsonIngredients);
-            editor.apply();
-
-/*            Intent broadcastIntent = new Intent();
-//            broadcastIntent.setAction()
-            Bundle broadcastBundle = new Bundle();
-            bundle.putParcelableArrayList(BROADCAST_BUNDLE_EXTRA, model.getIngredients());
-
-            intent.putExtra(BROADCAST_INTENT_EXTRA, broadcastBundle);
-            sendBroadcast(broadcastIntent);*/
-
         }
     }
 }

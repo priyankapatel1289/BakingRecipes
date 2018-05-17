@@ -3,6 +3,7 @@ package com.example.priyanka.bakingrecipes.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -10,8 +11,8 @@ import android.widget.RemoteViewsService;
 import com.example.priyanka.bakingrecipes.MainActivity;
 import com.example.priyanka.bakingrecipes.R;
 import com.example.priyanka.bakingrecipes.models.IngredientsModel;
-import com.example.priyanka.bakingrecipes.models.RecipeModel;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
@@ -22,12 +23,10 @@ public class ListWidgetService extends RemoteViewsService {
         return new ListViewsFactory(this.getApplicationContext(), intent);
     }
 
-    class ListViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    public  class ListViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         private ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
         private Context mContext;
-        private int appWidgetId;
-        private static final int mCount = 10;
         private Intent mIntent;
 
         public ListViewsFactory(Context applicationContext, Intent intent) {
@@ -36,30 +35,20 @@ public class ListWidgetService extends RemoteViewsService {
 
         }
 
-
         @Override
         public void onCreate() {
-
-//            Gson gson = new Gson();
-//            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, Context.MODE_PRIVATE);
-//            String json = sharedPreferences.getString(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, "");
-//            RecipeModel model = gson.fromJson(json, RecipeModel.class);
-//            ingredientsList = model.getIngredients();
-
-
-
         }
 
         @Override
         public void onDataSetChanged() {
-            Gson gson = new Gson();
-            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String json = sharedPreferences.getString(MainActivity.WIDGET_INGREDIENT_SHAREDPREF, "");
-            RecipeModel model = gson.fromJson(json, RecipeModel.class);
-            ingredientsList = model.getIngredients();
-
-            Log.v("ListWidgetService", "Ingredients List " + ingredientsList);
-
+            if (!json.equals("")) {
+                Gson gson = new Gson();
+                ingredientsList = gson.fromJson(json, new TypeToken<ArrayList<IngredientsModel>>() {
+                }.getType());
+                Log.v("ListWidgetService", "Ingredients List " + ingredientsList);
+            }
         }
 
         @Override
@@ -78,8 +67,8 @@ public class ListWidgetService extends RemoteViewsService {
         public RemoteViews getViewAt(int position) {
 
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item_layout);
-            views.setTextViewText(R.id.widget_tv_ingredients_quantity, "Quantity");
-            views.setTextViewText(R.id.widget_tv_ingredients_measurement, "Measurement");
+            views.setTextViewText(R.id.widget_tv_ingredients_quantity, String.valueOf(ingredientsList.get(position).getQuantity()));
+            views.setTextViewText(R.id.widget_tv_ingredients_measurement, ingredientsList.get(position).getMeasure());
             views.setTextViewText(R.id.widget_tv_ingredients_ingredient, ingredientsList.get(position).getIngredient());
 
             Intent fillInIntent = new Intent();

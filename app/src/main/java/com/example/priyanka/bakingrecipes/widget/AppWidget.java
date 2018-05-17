@@ -3,6 +3,7 @@ package com.example.priyanka.bakingrecipes.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,38 +22,22 @@ public class AppWidget extends AppWidgetProvider {
 
     ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
 
-//    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-//                                int appWidgetId) {
-//
-//        // Construct the RemoteViews object
-//        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
-////        views.setTextViewText(R.id.appwidget_text, widgetText);
-//
-//        // Instruct the widget manager to update the widget
-//        appWidgetManager.updateAppWidget(appWidgetId, views);
-//    }
-
-
-/*    @Override
+    @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if (intent.hasExtra(MainActivity.BROADCAST_INTENT_EXTRA)) {
-            Bundle bundle = intent.getBundleExtra(MainActivity.BROADCAST_INTENT_EXTRA);
-            ingredientsList = bundle.getParcelableArrayList(MainActivity.BROADCAST_BUNDLE_EXTRA);
-
-            Log.v("APP WIDGET", "ingredientsList is " + ingredientsList);
-        }
-
-    }*/
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context.getApplicationContext());
+        ComponentName componentName = new ComponentName(context.getApplicationContext(), AppWidget.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+        onUpdate(context, appWidgetManager, appWidgetIds);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-
-
         // There may be multiple widgets active, so update all of them
         for (int i = 0; i < appWidgetIds.length; i++) {
             int appWidgetId = appWidgetIds[i];
+
 
 
             Intent intent = new Intent(context, ListWidgetService.class);
@@ -61,8 +46,6 @@ public class AppWidget extends AppWidgetProvider {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
             views.setRemoteAdapter(R.id.lv_widget, intent);
-
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_widget);
 
             views.setEmptyView(R.id.lv_widget, R.id.widget_empty_text);
 
@@ -77,13 +60,14 @@ public class AppWidget extends AppWidgetProvider {
                             PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.lv_widget, templatePendingIntent);
 
-
             appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_widget);
 
         }
 
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
+
 
     @Override
     public void onEnabled(Context context) {
