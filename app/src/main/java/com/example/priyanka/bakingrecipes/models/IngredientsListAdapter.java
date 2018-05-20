@@ -11,6 +11,9 @@ import com.example.priyanka.bakingrecipes.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsListAdapter.IngredientsViewHolder> {
     private List<IngredientsModel> ingredientsList;
 
@@ -41,15 +44,16 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
     }
 
     class IngredientsViewHolder extends RecyclerView.ViewHolder {
-        private TextView quantityTextView;
-        private TextView measurementTextView;
-        private TextView ingredientTextView;
+        @BindView(R.id.tv_ingredients_quantity)
+        TextView quantityTextView;
+        @BindView(R.id.tv_ingredients_measurement)
+        TextView measurementTextView;
+        @BindView(R.id.tv_ingredients_ingredient)
+        TextView ingredientTextView;
 
         private IngredientsViewHolder(View itemView) {
             super(itemView);
-            quantityTextView = itemView.findViewById(R.id.tv_ingredients_quantity);
-            measurementTextView = itemView.findViewById(R.id.tv_ingredients_measurement);
-            ingredientTextView = itemView.findViewById(R.id.tv_ingredients_ingredient);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

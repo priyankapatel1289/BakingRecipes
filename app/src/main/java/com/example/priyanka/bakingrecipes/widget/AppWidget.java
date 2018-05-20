@@ -17,10 +17,10 @@ public class AppWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context.getApplicationContext());
-        ComponentName componentName = new ComponentName(context.getApplicationContext(), AppWidget.class);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
-        onUpdate(context, appWidgetManager, appWidgetIds);
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context.getApplicationContext());
+            ComponentName componentName = new ComponentName(context.getApplicationContext(), AppWidget.class);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+            onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override

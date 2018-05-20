@@ -12,6 +12,9 @@ import com.example.priyanka.bakingrecipes.models.StepsModel;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecipeDetailsActivity extends AppCompatActivity {
     private String name;
     private ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
@@ -24,12 +27,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private IngredientsFragment ingredientsFragment;
     private VideoInstructionsFragment videoInstructionsFragment;
 
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
-        final TabLayout tabLayout = findViewById(R.id.tab_layout);
+        ButterKnife.bind(this);
+
         tabLayout.addTab(tabLayout.newTab().setText("Ingredients"));
         tabLayout.addTab(tabLayout.newTab().setText("Steps"));
         tabLayout.addTab(tabLayout.newTab().setText("Video"));
@@ -39,16 +46,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         stepsFragment = new StepsFragment();
         videoInstructionsFragment = new VideoInstructionsFragment();
 
-        if (savedInstanceState != null) {
-            position = savedInstanceState.getInt("tabPosition");
-        }
-
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                    position = tab.getPosition();
-                    setCurrentTabFragment(position);
+                    tabLayout.setScrollPosition(position, 0f, false);
+                    setCurrentTabFragment(tab.getPosition());
             }
 
             @Override

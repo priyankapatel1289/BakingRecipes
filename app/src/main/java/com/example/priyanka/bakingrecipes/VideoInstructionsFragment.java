@@ -24,12 +24,18 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 public class VideoInstructionsFragment extends Fragment {
 
     private ArrayList<StepsModel> videoUrlList = new ArrayList<>();
-    private SimpleExoPlayerView playerView;
     private SimpleExoPlayer player;
+    @BindView(R.id.video_view)
+    SimpleExoPlayerView playerView;
+    Unbinder unbinder;
 
     private boolean playWhenReady = true;
     private int currentWindow;
@@ -46,7 +52,10 @@ public class VideoInstructionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_video_instructions, container, false);
+        View view =  inflater.inflate(R.layout.fragment_video_instructions, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
@@ -54,8 +63,7 @@ public class VideoInstructionsFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null && videoUrlList != null) {
-            playerView = view.findViewById(R.id.video_view);
-
+            unbinder = ButterKnife.bind(playerView);
             if (Util.SDK_INT > 23) {
                 initializePlayer();
             }
@@ -120,16 +128,19 @@ public class VideoInstructionsFragment extends Fragment {
         }
 
         MediaSource[] mediaSourcesToLoad = new MediaSource[videoUrlList.size()];
+//        ConcatenatingMediaSource concatenatingMediaSource = null;
         for (int i = 0; i<videoUrlList.size(); i++) {
             Uri uri = Uri.parse(videoUrlList.get(i).getVideoURL());
             MediaSource mediaSource = buildMediaSource(uri);
             mediaSourcesToLoad[i] = mediaSource;
-//            player.prepare(mediaSource, true, false);
+//            concatenatingMediaSource = new ConcatenatingMediaSource(mediaSourcesToLoad[i]);
         }
-        MediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad);
+//        MediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad);
+        MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
+                : new ConcatenatingMediaSource(mediaSourcesToLoad);
 
         if (player != null) {
-            player.prepare(mediaSources, true, false);
+            player.prepare(mediaSources);
         }
 
     }
@@ -145,4 +156,9 @@ public class VideoInstructionsFragment extends Fragment {
         videoUrlList = list;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

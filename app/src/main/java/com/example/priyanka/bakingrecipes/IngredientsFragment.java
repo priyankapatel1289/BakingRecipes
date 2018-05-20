@@ -14,9 +14,16 @@ import com.example.priyanka.bakingrecipes.models.IngredientsModel;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class IngredientsFragment extends Fragment {
 
     public ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
+    Unbinder unbinder;
+    @BindView(R.id.rv_ingredients_fragment)
+    RecyclerView recyclerView;
 
     public IngredientsFragment() {
         // Required empty public constructor
@@ -27,7 +34,10 @@ public class IngredientsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ingredients, container, false);
+        View view =  inflater.inflate(R.layout.fragment_ingredients, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
@@ -35,7 +45,6 @@ public class IngredientsFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            RecyclerView recyclerView = view.findViewById(R.id.rv_ingredients_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             IngredientsListAdapter adapter = new IngredientsListAdapter(ingredientsList);
             recyclerView.setAdapter(adapter);
@@ -46,4 +55,9 @@ public class IngredientsFragment extends Fragment {
         ingredientsList = list;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

@@ -14,6 +14,10 @@ import com.example.priyanka.bakingrecipes.models.StepsModel;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +25,9 @@ import java.util.ArrayList;
 public class StepsFragment extends Fragment {
 
     private ArrayList<StepsModel> stepsList = new ArrayList<>();
+    Unbinder unbinder;
+    @BindView(R.id.rv_steps_fragment)
+    RecyclerView recyclerView;
 
     public StepsFragment() {
         // Required empty public constructor
@@ -30,7 +37,10 @@ public class StepsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_steps, container, false);
+        View view =  inflater.inflate(R.layout.fragment_steps, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
@@ -38,7 +48,6 @@ public class StepsFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            RecyclerView recyclerView = view.findViewById(R.id.rv_steps_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             StepsListAdapter adapter = new StepsListAdapter(stepsList);
             recyclerView.setAdapter(adapter);
@@ -47,5 +56,11 @@ public class StepsFragment extends Fragment {
 
     public void setStepsList(ArrayList<StepsModel> list) {
         stepsList = list;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

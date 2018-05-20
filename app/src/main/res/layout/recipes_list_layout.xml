@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_recipe__list_rv"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:layout_height="150dp"
+        android:padding="3dp"
+        android:gravity="center">
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/image_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY" />
+        <TextView
+            android:id="@+id/tv_recipe__list_rv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:gravity="clip_horizontal"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:background="#a8000000"
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

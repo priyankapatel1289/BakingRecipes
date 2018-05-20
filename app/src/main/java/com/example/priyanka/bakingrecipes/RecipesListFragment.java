@@ -15,10 +15,17 @@ import com.example.priyanka.bakingrecipes.models.RecipesListAdapter;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class RecipesListFragment extends Fragment {
 
     public ArrayList<RecipeModel> recipeList = new ArrayList<>();
     private RecipesListAdapter adapter;
+    @BindView(R.id.rv_fragment_layout)
+    RecyclerView mRecyclerView;
+    Unbinder unbinder;
 
     interface RecipeListListener {
         void itemClicked(RecipeModel model);
@@ -33,7 +40,11 @@ public class RecipesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_recipes_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_recipes_list, container, false);
+
+        unbinder = ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
@@ -41,7 +52,6 @@ public class RecipesListFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            RecyclerView mRecyclerView = view.findViewById(R.id.rv_fragment_layout);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             adapter = new RecipesListAdapter(recipeList);
             mRecyclerView.setAdapter(adapter);
@@ -64,6 +74,11 @@ public class RecipesListFragment extends Fragment {
         this.listener = (RecipeListListener) context;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
     public class Data implements RecipeUtils.AsyncTaskCompleteListener {
 
@@ -73,6 +88,8 @@ public class RecipesListFragment extends Fragment {
 //            Log.v("TAG", "THE VALUE OF RECIPElIST ===============??????????????????????? " + result);
         }
     }
+
+
 
 
 

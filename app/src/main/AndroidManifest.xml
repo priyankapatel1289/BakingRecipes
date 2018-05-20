@@ -20,15 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".RecipeDetailsActivity"
-            android:parentActivityName=".MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity" />
 
         <receiver android:name=".widget.AppWidget">
             <intent-filter>
@@ -39,8 +34,17 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
         </receiver>
-        <service android:name=".widget.ListWidgetService"
+
+        <service
+            android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".ConfigurationActiviy">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
