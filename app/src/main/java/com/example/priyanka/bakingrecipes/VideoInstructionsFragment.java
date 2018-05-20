@@ -41,12 +41,9 @@ public class VideoInstructionsFragment extends Fragment {
     private int currentWindow;
     private long playbackPosition;
 
-
-
     public VideoInstructionsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -142,7 +139,6 @@ public class VideoInstructionsFragment extends Fragment {
         if (player != null) {
             player.prepare(mediaSources);
         }
-
     }
 
     private MediaSource buildMediaSource(Uri uri) {

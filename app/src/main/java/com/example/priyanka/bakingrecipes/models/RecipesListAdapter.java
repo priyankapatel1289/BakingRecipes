@@ -88,7 +88,6 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.
         private RecipesViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-//            recipeTextView = itemView.findViewById(R.id.tv_recipe__list_rv);
         }
     }
 }

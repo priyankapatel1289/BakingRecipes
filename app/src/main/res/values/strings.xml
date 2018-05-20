@@ -2,4 +2,7 @@
     <string name="app_name">BakingRecipes</string>
     <string name="add_widget">Add widget</string>
     <string name="select_more_recipe">Select more recipe!</string>
+    <string name="quantity">QNTY</string>
+    <string name="measurement">MSURE</string>
+    <string name="ingredient">INGREDIENT</string>
 </resources>

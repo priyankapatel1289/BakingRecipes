@@ -66,7 +66,6 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
 
                         ingredientsList.add(ingredientsModel);
                         recipeModel.setIngredients(ingredientsList);
-//                        Log.v("TAG", "VALUE OF INGREDIENTS LIST ================== " + ingredientsModel.getIngredient());
                     }
 
                     JSONArray steps = finalObject.getJSONArray("steps");
@@ -87,7 +86,6 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
 
                         recipeModel.setSteps(stepsList);
                         recipeModel.setVideoUrl(videoUrl);
-//                        Log.v("TAG", "VALUE OF STEPS LIST =============================== " + stepsModel.getVideoURL());
                     }
 
                     recipesList.add(recipeModel);

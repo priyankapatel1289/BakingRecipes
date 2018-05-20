@@ -50,18 +50,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                    tabLayout.setScrollPosition(position, 0f, false);
-                    setCurrentTabFragment(tab.getPosition());
+                position = tab.getPosition();
+                    setCurrentTabFragment(position);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 

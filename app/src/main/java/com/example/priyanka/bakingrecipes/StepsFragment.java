@@ -18,10 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class StepsFragment extends Fragment {
 
     private ArrayList<StepsModel> stepsList = new ArrayList<>();

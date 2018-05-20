@@ -14,19 +14,19 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="QNTY"
+            android:text="@string/quantity"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="MSURE"
+            android:text="@string/measurement"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
-            android:text="INGREDIENT"
+            android:text="@string/ingredient"
             android:textStyle="bold"/>
 
     </LinearLayout>

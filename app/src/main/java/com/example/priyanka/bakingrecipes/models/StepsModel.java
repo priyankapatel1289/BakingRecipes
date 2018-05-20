@@ -5,18 +5,9 @@ import android.os.Parcelable;
 
 public class StepsModel implements Parcelable {
 
-//    private int id;
     private String shortDescription;
     private String description;
     private String videoURL;
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     public String getShortDescription() {
         return shortDescription;

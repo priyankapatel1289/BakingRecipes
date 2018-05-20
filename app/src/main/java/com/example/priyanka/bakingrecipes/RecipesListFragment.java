@@ -41,7 +41,6 @@ public class RecipesListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_recipes_list, container, false);
-
         unbinder = ButterKnife.bind(this, view);
 
         return view;
@@ -65,7 +64,6 @@ public class RecipesListFragment extends Fragment {
             });
             new RecipeUtils(view.getContext(), new Data()).execute();
         }
-
     }
 
     @Override
@@ -85,12 +83,6 @@ public class RecipesListFragment extends Fragment {
         @Override
         public void onTaskComplete(ArrayList<RecipeModel> result) {
             adapter.setRecipesList(result);
-//            Log.v("TAG", "THE VALUE OF RECIPElIST ===============??????????????????????? " + result);
         }
     }
-
-
-
-
-
 }
