@@ -8,12 +8,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.priyanka.bakingrecipes.models.StepsModel;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -21,6 +23,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,6 +38,8 @@ public class VideoInstructionsFragment extends Fragment {
     private SimpleExoPlayer player;
     @BindView(R.id.video_view)
     SimpleExoPlayerView playerView;
+    @BindView(R.id.image_thumbnail)
+    ImageView imageThumbnail;
     Unbinder unbinder;
 
     private boolean playWhenReady = true;
@@ -60,9 +65,20 @@ public class VideoInstructionsFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null && videoUrlList != null) {
-            unbinder = ButterKnife.bind(playerView);
-            if (Util.SDK_INT > 23) {
-                initializePlayer();
+            if (playerView == null) {
+                ButterKnife.bind(imageThumbnail);
+                for (int i=0; i<videoUrlList.size(); i++) {
+                    if (videoUrlList.get(i).getThumbnailURL().isEmpty()) {
+                        imageThumbnail.setImageResource(android.R.drawable.stat_notify_error);
+                    } else {
+                        Picasso.with(view.getContext()).load(videoUrlList.get(i).getThumbnailURL()).into(imageThumbnail);
+                    }
+                }
+            } else {
+                ButterKnife.bind(playerView);
+                if (Util.SDK_INT >23) {
+                    initializePlayer();
+                }
             }
         }
     }
@@ -70,7 +86,7 @@ public class VideoInstructionsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        hideSystemUi();
+//        hideSystemUi();
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
@@ -125,14 +141,16 @@ public class VideoInstructionsFragment extends Fragment {
         }
 
         MediaSource[] mediaSourcesToLoad = new MediaSource[videoUrlList.size()];
-//        ConcatenatingMediaSource concatenatingMediaSource = null;
         for (int i = 0; i<videoUrlList.size(); i++) {
             Uri uri = Uri.parse(videoUrlList.get(i).getVideoURL());
             MediaSource mediaSource = buildMediaSource(uri);
             mediaSourcesToLoad[i] = mediaSource;
-//            concatenatingMediaSource = new ConcatenatingMediaSource(mediaSourcesToLoad[i]);
         }
-//        MediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad);
+//        for (int i=0; i<mediaSourcesToLoad.length; i++) {
+//            ConcatenatingMediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad[i]);
+//            player.prepare(mediaSources, true, false);
+
+//        }
         MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
                 : new ConcatenatingMediaSource(mediaSourcesToLoad);
 
@@ -142,10 +160,22 @@ public class VideoInstructionsFragment extends Fragment {
     }
 
     private MediaSource buildMediaSource(Uri uri) {
+        DefaultExtractorsFactory extractorsFactory =
+                new DefaultExtractorsFactory();
+        DefaultHttpDataSourceFactory dataSourceFactory =
+                new DefaultHttpDataSourceFactory( "user-agent");
 
-        return new ExtractorMediaSource.Factory(
-                new DefaultHttpDataSourceFactory("exo-player"))
-                .createMediaSource(uri);
+        ExtractorMediaSource videoSource =
+                new ExtractorMediaSource.Factory(
+                        new DefaultHttpDataSourceFactory("exoplayer")).
+                        createMediaSource(uri);
+
+
+//        return new ExtractorMediaSource.Factory(
+//                new DefaultHttpDataSourceFactory("exo-player"))
+//                .createMediaSource(uri);
+
+        return new ConcatenatingMediaSource(videoSource);
     }
 
     public void setVideoUrlList(ArrayList<StepsModel> list) {

@@ -2,9 +2,13 @@ package com.example.priyanka.bakingrecipes;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +25,25 @@ import butterknife.Unbinder;
 public class StepsFragment extends Fragment {
 
     private ArrayList<StepsModel> stepsList = new ArrayList<>();
+    private String SCROLL_POSITION = "scroll_postion";
+    Parcelable mListState;
+    private int mPosition = RecyclerView.NO_POSITION;
     Unbinder unbinder;
     @BindView(R.id.rv_steps_fragment)
     RecyclerView recyclerView;
 
     public StepsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(SCROLL_POSITION);
+            Log.v("STEPS FRAGMENT", "MLISTSTATE %%%%%%%%%%%%%%%%%%%%%%%%%% " + mListState);
+        }
     }
 
     @Override
@@ -40,11 +57,27 @@ public class StepsFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mListState = recyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(SCROLL_POSITION, mListState);
+        Log.v("STEPS FRAGMENT", "MLISTSTATE %%%%%%%%%%%%%%%%%%%%%%%%%% " + mListState);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         View view = getView();
         if (view != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+            recyclerView.smoothScrollToPosition(mPosition);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+                }
+            }, 300);
             StepsListAdapter adapter = new StepsListAdapter(stepsList);
             recyclerView.setAdapter(adapter);
         }

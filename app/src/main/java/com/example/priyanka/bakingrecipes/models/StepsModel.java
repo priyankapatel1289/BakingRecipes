@@ -8,6 +8,15 @@ public class StepsModel implements Parcelable {
     private String shortDescription;
     private String description;
     private String videoURL;
+    private String thumbnailURL;
+
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
+    }
 
     public String getShortDescription() {
         return shortDescription;
@@ -33,6 +42,9 @@ public class StepsModel implements Parcelable {
         this.videoURL = videoURL;
     }
 
+    public StepsModel() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -43,18 +55,17 @@ public class StepsModel implements Parcelable {
         dest.writeString(this.shortDescription);
         dest.writeString(this.description);
         dest.writeString(this.videoURL);
-    }
-
-    public StepsModel() {
+        dest.writeString(this.thumbnailURL);
     }
 
     protected StepsModel(Parcel in) {
         this.shortDescription = in.readString();
         this.description = in.readString();
         this.videoURL = in.readString();
+        this.thumbnailURL = in.readString();
     }
 
-    public static final Parcelable.Creator<StepsModel> CREATOR = new Parcelable.Creator<StepsModel>() {
+    public static final Creator<StepsModel> CREATOR = new Creator<StepsModel>() {
         @Override
         public StepsModel createFromParcel(Parcel source) {
             return new StepsModel(source);

@@ -36,15 +36,23 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_details);
 
         ButterKnife.bind(this);
+        ingredientsFragment = new IngredientsFragment();
+        stepsFragment = new StepsFragment();
+        videoInstructionsFragment = new VideoInstructionsFragment();
+
+        if (savedInstanceState!= null) {
+            if (savedInstanceState.containsKey("StepsFragment")) {
+                stepsFragment = (StepsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "StepsFragment");
+            }
+        }
+
 
         tabLayout.addTab(tabLayout.newTab().setText("Ingredients"));
         tabLayout.addTab(tabLayout.newTab().setText("Steps"));
         tabLayout.addTab(tabLayout.newTab().setText("Video"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        ingredientsFragment = new IngredientsFragment();
-        stepsFragment = new StepsFragment();
-        videoInstructionsFragment = new VideoInstructionsFragment();
+
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -82,11 +90,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("tabPosition", position);
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putInt("tabPosition", position);
+//        getSupportFragmentManager().putFragment(outState, "StepsFragment", stepsFragment);
+//    }
 
     public void replaceFragment(Fragment fragment) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

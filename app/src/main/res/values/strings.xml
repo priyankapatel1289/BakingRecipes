@@ -5,4 +5,5 @@
     <string name="quantity">QNTY</string>
     <string name="measurement">MSURE</string>
     <string name="ingredient">INGREDIENT</string>
+    <string name="exo_player_placeholder">Exo Player Placeholder</string>
 </resources>
