@@ -47,27 +47,32 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
 
 
-        tabLayout.addTab(tabLayout.newTab().setText("Ingredients"));
-        tabLayout.addTab(tabLayout.newTab().setText("Steps"));
-        tabLayout.addTab(tabLayout.newTab().setText("Video"));
+
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.ingredients));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.steps));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.video_instructions));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-
-
+//        TabLayout.Tab tab = tabLayout.getTabAt(1);
+//        tab.select();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 position = tab.getPosition();
                     setCurrentTabFragment(position);
+//                tabLayout.getSelectedTabPosition();
+
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                position = tab.getPosition();
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                setCurrentTabFragment(1);
             }
         });
 

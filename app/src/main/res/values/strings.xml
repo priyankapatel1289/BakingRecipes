@@ -6,4 +6,7 @@
     <string name="measurement">MSURE</string>
     <string name="ingredient">INGREDIENT</string>
     <string name="exo_player_placeholder">Exo Player Placeholder</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="video_instructions">Video Instructions</string>
 </resources>

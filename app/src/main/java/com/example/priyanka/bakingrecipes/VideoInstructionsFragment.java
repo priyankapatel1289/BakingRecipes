@@ -15,7 +15,6 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -45,6 +44,7 @@ public class VideoInstructionsFragment extends Fragment {
     private boolean playWhenReady = true;
     private int currentWindow;
     private long playbackPosition;
+//    private Uri videoUri;
 
     public VideoInstructionsFragment() {
         // Required empty public constructor
@@ -86,7 +86,7 @@ public class VideoInstructionsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        hideSystemUi();
+        hideSystemUi();
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
@@ -140,40 +140,37 @@ public class VideoInstructionsFragment extends Fragment {
             player.seekTo(currentWindow, playbackPosition);
         }
 
-        MediaSource[] mediaSourcesToLoad = new MediaSource[videoUrlList.size()];
+//        MediaSource[] mediaSourcesToLoad = new MediaSource[videoUrlList.size()];
+        MediaSource[] mediaSourcesToLoad;
+//        List<MediaSource> list = new ArrayList<>();
         for (int i = 0; i<videoUrlList.size(); i++) {
-            Uri uri = Uri.parse(videoUrlList.get(i).getVideoURL());
-            MediaSource mediaSource = buildMediaSource(uri);
-            mediaSourcesToLoad[i] = mediaSource;
-        }
-//        for (int i=0; i<mediaSourcesToLoad.length; i++) {
-//            ConcatenatingMediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad[i]);
-//            player.prepare(mediaSources, true, false);
+            Uri videoUri = Uri.parse(videoUrlList.get(i).getVideoURL());
 
+            if (!videoUri.equals(Uri.EMPTY)) {
+                MediaSource mediaSource = buildMediaSource(videoUri);
+                mediaSourcesToLoad = new MediaSource[] {mediaSource};
+                ConcatenatingMediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad);
+                player.prepare(mediaSources, true, false);
+//                mediaSourcesToLoad[i] = mediaSource;
+//                list.add(mediaSource);
+            }
+
+        }
+
+//        MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
+//                : new ConcatenatingMediaSource(mediaSourcesToLoad);
+//
+//        if (player != null) {
+//            player.prepare(mediaSources);
 //        }
-        MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
-                : new ConcatenatingMediaSource(mediaSourcesToLoad);
-
-        if (player != null) {
-            player.prepare(mediaSources);
-        }
     }
 
     private MediaSource buildMediaSource(Uri uri) {
-        DefaultExtractorsFactory extractorsFactory =
-                new DefaultExtractorsFactory();
-        DefaultHttpDataSourceFactory dataSourceFactory =
-                new DefaultHttpDataSourceFactory( "user-agent");
 
         ExtractorMediaSource videoSource =
                 new ExtractorMediaSource.Factory(
                         new DefaultHttpDataSourceFactory("exoplayer")).
                         createMediaSource(uri);
-
-
-//        return new ExtractorMediaSource.Factory(
-//                new DefaultHttpDataSourceFactory("exo-player"))
-//                .createMediaSource(uri);
 
         return new ConcatenatingMediaSource(videoSource);
     }
