@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:contentDescription="@string/recipe_image"/>
         <TextView
             android:id="@+id/tv_recipe__list_rv"
             android:layout_width="wrap_content"

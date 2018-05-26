@@ -4,11 +4,11 @@ package com.example.priyanka.bakingrecipes;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,17 +37,7 @@ public class StepsFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setRetainInstance(true);
-        if (savedInstanceState != null) {
-            mListState = savedInstanceState.getParcelable(SCROLL_POSITION);
-            Log.v("STEPS FRAGMENT", "MLISTSTATE %%%%%%%%%%%%%%%%%%%%%%%%%% " + mListState);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_steps, container, false);
@@ -57,11 +47,20 @@ public class StepsFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mListState = recyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(SCROLL_POSITION, mListState);
-        Log.v("STEPS FRAGMENT", "MLISTSTATE %%%%%%%%%%%%%%%%%%%%%%%%%% " + mListState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(SCROLL_POSITION)) {
+                mListState = savedInstanceState.getParcelable(SCROLL_POSITION);
+            }
+        }
     }
 
     @Override

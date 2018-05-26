@@ -20,8 +20,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
     private ArrayList<StepsModel> stepsList = new ArrayList<>();
     private ArrayList<StepsModel> videoUrlList = new ArrayList<>();
-
-    private int position;
+    private String STEPS_FRAGMENT_INSTANCE = "steps_fragment_instance";
+    private String INGREDIENTS_FRAGMENT_INSTANCE = "ingredients_fragment_instance";
 
     private StepsFragment stepsFragment;
     private IngredientsFragment ingredientsFragment;
@@ -41,38 +41,30 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         videoInstructionsFragment = new VideoInstructionsFragment();
 
         if (savedInstanceState!= null) {
-            if (savedInstanceState.containsKey("StepsFragment")) {
-                stepsFragment = (StepsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "StepsFragment");
+            if (savedInstanceState.containsKey(STEPS_FRAGMENT_INSTANCE)) {
+                stepsFragment = (StepsFragment) getSupportFragmentManager().getFragment(savedInstanceState, STEPS_FRAGMENT_INSTANCE);
+            } else if (savedInstanceState.containsKey(INGREDIENTS_FRAGMENT_INSTANCE)) {
+                ingredientsFragment = (IngredientsFragment) getSupportFragmentManager().getFragment(savedInstanceState, INGREDIENTS_FRAGMENT_INSTANCE);
             }
         }
-
-
 
         tabLayout.addTab(tabLayout.newTab().setText(R.string.ingredients));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.steps));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.video_instructions));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-//        TabLayout.Tab tab = tabLayout.getTabAt(1);
-//        tab.select();
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                position = tab.getPosition();
-                    setCurrentTabFragment(position);
-//                tabLayout.getSelectedTabPosition();
-
+                setCurrentTabFragment(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                position = tab.getPosition();
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                setCurrentTabFragment(1);
             }
         });
 
@@ -95,12 +87,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putInt("tabPosition", position);
-//        getSupportFragmentManager().putFragment(outState, "StepsFragment", stepsFragment);
-//    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (stepsFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, STEPS_FRAGMENT_INSTANCE, stepsFragment);
+        }
+        if (ingredientsFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, INGREDIENTS_FRAGMENT_INSTANCE, ingredientsFragment);
+        }
+    }
 
     public void replaceFragment(Fragment fragment) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -122,5 +118,4 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 break;
         }
     }
-
 }

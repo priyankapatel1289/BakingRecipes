@@ -9,4 +9,5 @@
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="video_instructions">Video Instructions</string>
+    <string name="recipe_image">Recipe Image</string>
 </resources>

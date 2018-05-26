@@ -79,7 +79,7 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.
         notifyDataSetChanged();
     }
 
-    class RecipesViewHolder extends RecyclerView.ViewHolder {
+    public class RecipesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_recipe__list_rv)
         TextView recipeTextView;
         @BindView(R.id.image_recipe)

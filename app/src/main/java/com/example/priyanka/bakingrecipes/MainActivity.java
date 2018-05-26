@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,29 +19,16 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements RecipesListFragment.RecipeListListener {
 
     public static String WIDGET_INGREDIENT_SHAREDPREF = "widget_ingredientsList";
-    private Fragment mContent;
-    public RecipesListFragment recipesList;
+    public RecipesListFragment recipesListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recipesList = new RecipesListFragment();
-//
-//        if (savedInstanceState != null) {
-//            if (savedInstanceState.containsKey("RecipeListFragment")) {
-//                recipesList = (RecipesListFragment) getSupportFragmentManager().getFragment(savedInstanceState, "RecipeListFragment");
-//            }
-////            recipesListFragment = getSupportFragmentManager().getFragment(savedInstanceState, "RecipeListFragment");
-//        }
+        recipesListFragment = new RecipesListFragment();
+
         ButterKnife.bind(this);
     }
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        getSupportFragmentManager().putFragment(outState, "RecipeListFragment", recipesList);
-//    }
 
     public void itemClicked(RecipeModel model) {
 

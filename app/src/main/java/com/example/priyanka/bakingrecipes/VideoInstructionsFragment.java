@@ -4,6 +4,7 @@ package com.example.priyanka.bakingrecipes;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +53,7 @@ public class VideoInstructionsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_video_instructions, container, false);
@@ -140,29 +142,24 @@ public class VideoInstructionsFragment extends Fragment {
             player.seekTo(currentWindow, playbackPosition);
         }
 
-//        MediaSource[] mediaSourcesToLoad = new MediaSource[videoUrlList.size()];
-        MediaSource[] mediaSourcesToLoad;
-//        List<MediaSource> list = new ArrayList<>();
+        List<MediaSource> list = new ArrayList<>();
         for (int i = 0; i<videoUrlList.size(); i++) {
             Uri videoUri = Uri.parse(videoUrlList.get(i).getVideoURL());
 
             if (!videoUri.equals(Uri.EMPTY)) {
                 MediaSource mediaSource = buildMediaSource(videoUri);
-                mediaSourcesToLoad = new MediaSource[] {mediaSource};
-                ConcatenatingMediaSource mediaSources = new ConcatenatingMediaSource(mediaSourcesToLoad);
-                player.prepare(mediaSources, true, false);
-//                mediaSourcesToLoad[i] = mediaSource;
-//                list.add(mediaSource);
+                list.add(mediaSource);
             }
-
         }
 
-//        MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
-//                : new ConcatenatingMediaSource(mediaSourcesToLoad);
+        MediaSource[] mediaSourcesToLoad = list.toArray(new MediaSource[list.size()]);
+
+        MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
+                : new ConcatenatingMediaSource(mediaSourcesToLoad);
 //
-//        if (player != null) {
-//            player.prepare(mediaSources);
-//        }
+        if (player != null) {
+            player.prepare(mediaSources);
+        }
     }
 
     private MediaSource buildMediaSource(Uri uri) {
