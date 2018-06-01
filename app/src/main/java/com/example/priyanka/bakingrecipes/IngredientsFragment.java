@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,9 +50,13 @@ public class IngredientsFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mListState = recyclerView.getLayoutManager().onSaveInstanceState();
-        outState.putParcelable(SCROLL_POSITION, mListState);
+        try {
+            super.onSaveInstanceState(outState);
+        }
+        catch (NullPointerException exception) {
+            mListState = recyclerView.getLayoutManager().onSaveInstanceState();
+            outState.putParcelable(SCROLL_POSITION, mListState);
+        }
     }
 
     @Override
@@ -68,19 +73,27 @@ public class IngredientsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         if (view != null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setLayoutManager(linearLayoutManager);
             if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
             recyclerView.smoothScrollToPosition(mPosition);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-                }
-            }, 300);
-            IngredientsListAdapter adapter = new IngredientsListAdapter(ingredientsList);
+            if (mListState != null) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+                    }
+                }, 300);
+            }
+
+            final IngredientsListAdapter adapter = new IngredientsListAdapter(ingredientsList);
             recyclerView.setAdapter(adapter);
         }
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                recyclerView.getContext(), linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     public void setIngredientsList(ArrayList<IngredientsModel> list) {

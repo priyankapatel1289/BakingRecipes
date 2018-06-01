@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.example.priyanka.bakingrecipes.models.IngredientsModel;
 import com.example.priyanka.bakingrecipes.models.StepsModel;
@@ -15,13 +17,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity implements StepsFragment.VideoClickListener{
     private String name;
-    private ArrayList<IngredientsModel> ingredientsList = new ArrayList<>();
-    private ArrayList<StepsModel> stepsList = new ArrayList<>();
-    private ArrayList<StepsModel> videoUrlList = new ArrayList<>();
     private String STEPS_FRAGMENT_INSTANCE = "steps_fragment_instance";
     private String INGREDIENTS_FRAGMENT_INSTANCE = "ingredients_fragment_instance";
+    private String VIDEO_FRAGMENT_INSTANCE = "video_fragment_instance";
 
     private StepsFragment stepsFragment;
     private IngredientsFragment ingredientsFragment;
@@ -29,13 +29,18 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+    @BindView(R.id.tabToolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
-
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+
         ingredientsFragment = new IngredientsFragment();
         stepsFragment = new StepsFragment();
         videoInstructionsFragment = new VideoInstructionsFragment();
@@ -45,6 +50,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 stepsFragment = (StepsFragment) getSupportFragmentManager().getFragment(savedInstanceState, STEPS_FRAGMENT_INSTANCE);
             } else if (savedInstanceState.containsKey(INGREDIENTS_FRAGMENT_INSTANCE)) {
                 ingredientsFragment = (IngredientsFragment) getSupportFragmentManager().getFragment(savedInstanceState, INGREDIENTS_FRAGMENT_INSTANCE);
+            } else if (savedInstanceState.containsKey(VIDEO_FRAGMENT_INSTANCE)) {
+                videoInstructionsFragment = (VideoInstructionsFragment) getSupportFragmentManager().getFragment(savedInstanceState, VIDEO_FRAGMENT_INSTANCE);
             }
         }
 
@@ -53,9 +60,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.video_instructions));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+        DetailsPagerAdapter detailsPagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), this);
+        viewPager.setAdapter(detailsPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
                 setCurrentTabFragment(tab.getPosition());
             }
 
@@ -72,9 +85,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (intent != null) {
             if (intent.hasExtra("data")) {
                 Bundle bundle = intent.getBundleExtra("data");
-                ingredientsList = bundle.getParcelableArrayList("ingredients");
-                stepsList = bundle.getParcelableArrayList("steps");
-                videoUrlList = bundle.getParcelableArrayList("videoUrl");
+                ArrayList<IngredientsModel> ingredientsList = bundle.getParcelableArrayList("ingredients");
+                ArrayList<StepsModel> stepsList = bundle.getParcelableArrayList("steps");
+                ArrayList<StepsModel> videoUrlList = bundle.getParcelableArrayList("videoUrl");
 
                 ingredientsFragment.setIngredientsList(ingredientsList);
                 stepsFragment.setStepsList(stepsList);
@@ -95,6 +108,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
         if (ingredientsFragment.isAdded()) {
             getSupportFragmentManager().putFragment(outState, INGREDIENTS_FRAGMENT_INSTANCE, ingredientsFragment);
+        }
+        if (videoInstructionsFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, VIDEO_FRAGMENT_INSTANCE, videoInstructionsFragment);
         }
     }
 
@@ -117,5 +133,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 replaceFragment(videoInstructionsFragment);
                 break;
         }
+    }
+
+    @Override
+    public void videoClicked(StepsModel model) {
+        Bundle bundle = new Bundle();
+        bundle.putString("videoURL", model.getVideoURL());
+        VideoInstructionsFragment videoInstructionsFragment = new VideoInstructionsFragment();
+        videoInstructionsFragment.setArguments(bundle);
+        replaceFragment(videoInstructionsFragment);
     }
 }

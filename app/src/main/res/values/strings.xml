@@ -10,4 +10,5 @@
     <string name="steps">Steps</string>
     <string name="video_instructions">Video Instructions</string>
     <string name="recipe_image">Recipe Image</string>
+    <string name="recipe_video_instructions">Recipe Video Instructions</string>
 </resources>

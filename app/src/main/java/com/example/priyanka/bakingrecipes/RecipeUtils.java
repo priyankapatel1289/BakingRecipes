@@ -78,6 +78,7 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
                         StepsModel videoModel = new StepsModel();
                         stepsModel.setShortDescription(stepsObject.getString("shortDescription"));
                         stepsModel.setDescription(stepsObject.getString("description"));
+                        stepsModel.setVideoURL(stepsObject.getString("videoURL"));
 
                         videoModel.setVideoURL(stepsObject.getString("videoURL"));
                         videoModel.setThumbnailURL(stepsObject.getString("thumbnailURL"));

@@ -1,12 +1,14 @@
 package com.example.priyanka.bakingrecipes;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +33,16 @@ public class StepsFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.rv_steps_fragment)
     RecyclerView recyclerView;
+
+    interface StepsListListener {
+        void itemClicked(StepsModel model);
+    }
+    private StepsListListener listener;
+
+    interface VideoClickListener {
+        void videoClicked(StepsModel model);
+    }
+    public VideoClickListener videoClickListener;
 
     public StepsFragment() {
         // Required empty public constructor
@@ -67,19 +79,52 @@ public class StepsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         if (view != null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setLayoutManager(linearLayoutManager);
             if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
             recyclerView.smoothScrollToPosition(mPosition);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-                }
-            }, 300);
-            StepsListAdapter adapter = new StepsListAdapter(stepsList);
+
+            if (mListState != null) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+                    }
+                }, 300);
+            }
+
+            final StepsListAdapter adapter = new StepsListAdapter(stepsList);
             recyclerView.setAdapter(adapter);
+            adapter.setListener(new StepsListAdapter.Listener() {
+                @Override
+                public void onClick(StepsModel stepsModel) {
+                    if (listener != null) {
+                        listener.itemClicked(stepsModel);
+                    }
+                }
+            });
+            adapter.setVideoClickListener(new StepsListAdapter.VideoClickListener() {
+                @Override
+                public void videoClickListener(StepsModel stepsModel) {
+                    if (videoClickListener != null) {
+                        videoClickListener.videoClicked(stepsModel);
+                    }
+                }
+            });
         }
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                recyclerView.getContext(), linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof VideoClickListener) {
+            videoClickListener = (VideoClickListener) context;
+            }
     }
 
     public void setStepsList(ArrayList<StepsModel> list) {

@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_steps_description"
+        android:id="@+id/tv_steps_short_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"/>
+        android:padding="2dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/image_video"
+        android:layout_toStartOf="@+id/image_video"
+        android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/image_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/recipe_video_instructions"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:src="@drawable/video"/>
+    <TextView
+        android:id="@+id/tv_steps_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_steps_short_description"
+        android:visibility="gone"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -42,11 +42,11 @@ public class VideoInstructionsFragment extends Fragment {
     @BindView(R.id.image_thumbnail)
     ImageView imageThumbnail;
     Unbinder unbinder;
+    private String individualVideoLink;
 
     private boolean playWhenReady = true;
     private int currentWindow;
     private long playbackPosition;
-//    private Uri videoUri;
 
     public VideoInstructionsFragment() {
         // Required empty public constructor
@@ -58,6 +58,10 @@ public class VideoInstructionsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_video_instructions, container, false);
         unbinder = ButterKnife.bind(this, view);
+        Bundle bundle = this.getArguments();
+        if (getArguments() != null) {
+            individualVideoLink = bundle.getString("videoURL");
+        }
 
         return view;
     }
@@ -143,12 +147,21 @@ public class VideoInstructionsFragment extends Fragment {
         }
 
         List<MediaSource> list = new ArrayList<>();
-        for (int i = 0; i<videoUrlList.size(); i++) {
-            Uri videoUri = Uri.parse(videoUrlList.get(i).getVideoURL());
+        if (individualVideoLink != null) {
+            Uri videoUri = Uri.parse(individualVideoLink);
 
             if (!videoUri.equals(Uri.EMPTY)) {
                 MediaSource mediaSource = buildMediaSource(videoUri);
                 list.add(mediaSource);
+            }
+        } else {
+            for (int i = 0; i<videoUrlList.size(); i++) {
+                Uri videoListUri = Uri.parse(videoUrlList.get(i).getVideoURL());
+
+                if (!videoListUri.equals(Uri.EMPTY)) {
+                    MediaSource mediaSource = buildMediaSource(videoListUri);
+                    list.add(mediaSource);
+                }
             }
         }
 
@@ -156,7 +169,7 @@ public class VideoInstructionsFragment extends Fragment {
 
         MediaSource mediaSources = mediaSourcesToLoad.length == 1 ? mediaSourcesToLoad[0]
                 : new ConcatenatingMediaSource(mediaSourcesToLoad);
-//
+
         if (player != null) {
             player.prepare(mediaSources);
         }
