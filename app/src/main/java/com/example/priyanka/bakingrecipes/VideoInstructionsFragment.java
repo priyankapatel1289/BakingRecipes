@@ -46,8 +46,9 @@ public class VideoInstructionsFragment extends Fragment {
     private String individualVideoLink;
     private String PLAYBACK_POSITION = "playback position";
     private String CURRENT_WINDOW = "current window";
+    private String PLAY_WHEN_READY = "play when ready";
 
-    private boolean playWhenReady = true;
+    private boolean playWhenReady;
     private int currentWindow;
     private long playbackPosition;
 
@@ -93,6 +94,7 @@ public class VideoInstructionsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putLong(PLAYBACK_POSITION, playbackPosition);
         outState.putInt(CURRENT_WINDOW, currentWindow);
+        outState.putBoolean(PLAY_WHEN_READY, playWhenReady);
     }
 
     @Override
@@ -101,8 +103,12 @@ public class VideoInstructionsFragment extends Fragment {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(PLAYBACK_POSITION)) {
                 playbackPosition = savedInstanceState.getLong(PLAYBACK_POSITION, C.TIME_UNSET);
-            } if (savedInstanceState.containsKey(CURRENT_WINDOW)) {
+            }
+            if (savedInstanceState.containsKey(CURRENT_WINDOW)) {
                 currentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
+            }
+            if (savedInstanceState.containsKey(PLAY_WHEN_READY)) {
+                playWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
             }
         }
     }
