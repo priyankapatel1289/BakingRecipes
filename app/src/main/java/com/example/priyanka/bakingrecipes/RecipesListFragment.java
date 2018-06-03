@@ -31,6 +31,7 @@ public class RecipesListFragment extends android.support.v4.app.Fragment {
     Parcelable mListState;
     private String SCROLL_POSITION = "scroll_postion";
     private int mPosition = RecyclerView.NO_POSITION;
+    private String networkURL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
     interface RecipeListListener {
         void itemClicked(RecipeModel model);
@@ -85,7 +86,7 @@ public class RecipesListFragment extends android.support.v4.app.Fragment {
                     }
                 }
             });
-            new RecipeUtils(view.getContext(), new Data()).execute();
+            new RecipeUtils(view.getContext(), new Data()).execute(networkURL);
         }
     }
 

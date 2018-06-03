@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.priyanka.bakingrecipes.models.StepsModel;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -22,7 +24,6 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class VideoInstructionsFragment extends Fragment {
     ImageView imageThumbnail;
     Unbinder unbinder;
     private String individualVideoLink;
+    private String PLAYBACK_POSITION = "playback position";
+    private String CURRENT_WINDOW = "current window";
 
     private boolean playWhenReady = true;
     private int currentWindow;
@@ -62,7 +65,6 @@ public class VideoInstructionsFragment extends Fragment {
         if (getArguments() != null) {
             individualVideoLink = bundle.getString("videoURL");
         }
-
         return view;
     }
 
@@ -82,9 +84,25 @@ public class VideoInstructionsFragment extends Fragment {
                 }
             } else {
                 ButterKnife.bind(playerView);
-                if (Util.SDK_INT >23) {
-                    initializePlayer();
-                }
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(PLAYBACK_POSITION, playbackPosition);
+        outState.putInt(CURRENT_WINDOW, currentWindow);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(PLAYBACK_POSITION)) {
+                playbackPosition = savedInstanceState.getLong(PLAYBACK_POSITION, C.TIME_UNSET);
+            } if (savedInstanceState.containsKey(CURRENT_WINDOW)) {
+                currentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
             }
         }
     }
@@ -93,9 +111,7 @@ public class VideoInstructionsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         hideSystemUi();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
-        }
+        initializePlayer();
     }
 
     @SuppressLint("InlineApi")
@@ -111,17 +127,7 @@ public class VideoInstructionsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
+        releasePlayer();
     }
 
     private void releasePlayer() {
@@ -129,6 +135,7 @@ public class VideoInstructionsFragment extends Fragment {
             playbackPosition = player.getCurrentPosition();
             currentWindow = player.getCurrentWindowIndex();
             playWhenReady = player.getPlayWhenReady();
+            player.stop();
             player.release();
             player = null;
         }
@@ -141,14 +148,13 @@ public class VideoInstructionsFragment extends Fragment {
                     new DefaultTrackSelector(),
                     new DefaultLoadControl());
             playerView.setPlayer(player);
-
             player.setPlayWhenReady(playWhenReady);
             player.seekTo(currentWindow, playbackPosition);
         }
 
         List<MediaSource> list = new ArrayList<>();
         if (individualVideoLink != null) {
-            Uri videoUri = Uri.parse(individualVideoLink);
+             Uri videoUri = Uri.parse(individualVideoLink);
 
             if (!videoUri.equals(Uri.EMPTY)) {
                 MediaSource mediaSource = buildMediaSource(videoUri);
@@ -171,7 +177,10 @@ public class VideoInstructionsFragment extends Fragment {
                 : new ConcatenatingMediaSource(mediaSourcesToLoad);
 
         if (player != null) {
-            player.prepare(mediaSources);
+            if (playbackPosition != C.TIME_UNSET) {
+                player.seekTo(playbackPosition);
+            }
+            player.prepare(mediaSources, false, false);
         }
     }
 

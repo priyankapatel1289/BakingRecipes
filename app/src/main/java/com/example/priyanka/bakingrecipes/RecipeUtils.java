@@ -12,8 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -27,7 +30,7 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
     private AsyncTaskCompleteListener listener;
 
     public RecipeUtils(Context context, AsyncTaskCompleteListener listener) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         this.listener = listener;
     }
 
@@ -35,17 +38,24 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
 
         @Override
         protected ArrayList<RecipeModel> doInBackground(String... strings) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
 
             try {
-                InputStream inputStream = context.getAssets().open("recipes.json");
-                StringBuilder builder = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                URL url = new URL(strings[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+
+                StringBuilder stringBuilder = new StringBuilder();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    builder.append(line);
+                    stringBuilder.append(line);
                 }
 
-                String finalJson = builder.toString();
+                String finalJson = stringBuilder.toString();
                 JSONArray parentArray = new JSONArray(finalJson);
 
                 for (int i = 0; i<parentArray.length(); i++) {
@@ -96,8 +106,19 @@ public class RecipeUtils extends AsyncTask<String, Void, ArrayList<RecipeModel>>
                 return recipesList;
             }
 
-            catch (Exception ex) {
-                ex.printStackTrace();
+            catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }
