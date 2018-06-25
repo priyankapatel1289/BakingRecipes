@@ -1,4 +1,4 @@
-#Baking Recipes
+# Baking Recipes
 
 View list of recipes. Upon selecting a recipe, user gets options to see ingredients, recipe lists and available instruction videos. App is compatible for tablet as well. Integrated third party libraries and provided a complete UX with home screen widget.
 
